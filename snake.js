@@ -21,12 +21,52 @@ const snake = (function () {
     };
     
     function createSnake(config) {
-        generateSnakeUI(config.boardSize, config.snakeSize)
+        generateSnakeUI(config.boardSize, config.snakeSize);
     };
 
-    return {
-        createSnake: createSnake
+    function moveHead() {
+        snakeData.move()
 
+    };
+
+    function updateSnakePossition() {
+        const head = `${snakeData.headPositionX}${snakeData.headPositionY}`;
+
+        snakeData.body.unshift(head);
+
+        const tail = snakeData.body.pop();
+
+        document.getElementById(tail).className = "";
+        document.getElementById(head).className = "snake";
+    }
+    
+
+    function setMoveDirection(direction){
+        if(direction === "right") {
+            snakeData.move = () => {snakeData.headPositionX +=1; };
+        }
+        else if (direction === "left") {
+            snakeData.move = () => {snakeData.headPositionX -=1; };    
+        }
+        else if (direction === "down") {
+            snakeData.move = () => {snakeData.headPositionY +=1; };    
+        }
+        else if (direction === "up") {
+            snakeData.move = () => {snakeData.headPositionY -=1; };    
+        }
+
+    }
+
+    function getSnake() {
+        return snakeData;
+    }
+
+    return {
+        createSnake: createSnake,
+        moveHead: moveHead,
+        setMoveDirection: setMoveDirection,
+        getSnake: getSnake,
+        updateSnakePossition: updateSnakePossition
     };
 
 })();

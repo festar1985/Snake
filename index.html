@@ -13,7 +13,11 @@
             }
             .snake
             {
-                background-color: whitesmoke;
+                background-color: white;
+            }
+            .food
+            {
+                background-color: red;
             }
         </style>
     </head>
@@ -27,14 +31,14 @@
         
         
         <script>
-           const game = snakeGame.createGame({
+           snakeGame.createGame({
                boardSize: 20,
-               snamkeSize: 3,
+               snakeSize: 3,
                playerName: "Georgi",
-               speed: 1000,
+               speed: 500,
            });
 
-           //game.start();
+           snakeGame.start();
 
         </script>
     </body>

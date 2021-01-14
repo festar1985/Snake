@@ -4,7 +4,7 @@ const snakeGame = (function () {
         gameBoard.createGameBoard(config);
     };
     function start() {
-
+        gameBoard.start();
     };
     
     

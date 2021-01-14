@@ -1,5 +1,16 @@
 ;
 const gameBoard = (function () {
+    let configData;
+    const food = {
+        x: null,
+        y: null
+    };
+    let score = 0;
+
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+
     function generateGameBoardUI(size) {
         let gameBoard = "<table>";
 
@@ -20,12 +31,98 @@ const gameBoard = (function () {
     }
     
     function createGameBoard(config) {
+        
+        configData = config;
+
         generateGameBoardUI(config.boardSize);
         snake.createSnake(config);
+
+    };
+
+    function checkSnakeHeadPosition () {
+        const snakeData = snake.getSnake();
+
+        if(snakeData.headPositionX < 0 || snakeData.headPositionX >= configData.boardSize) {
+            alert("Game Over");
+        }
+        else if(snakeData.headPositionY < 0 || snakeData.headPositionY >= configData.boardSize) {
+            alert("Game Over");
+        }
+
+        if (snakeData.body.includes(`${snakeData.headPositionX}${snakeData.headPositionY}`)) {
+            alert("Game Over you bite yourself")
+        }
+
+    }
+
+
+    function setupUserInput() {
+
+        document.addEventListener("keydown", (e) => {
+            if(e.keyCode === 37) {
+                snake.setMoveDirection("left");
+            }else if (e.keyCode === 38) {
+                snake.setMoveDirection("up");
+            }else if (e.keyCode === 39) {
+                snake.setMoveDirection("right");
+            }else if (e.keyCode === 40) {
+                snake.setMoveDirection("down");
+            }
+        });
+    };
+
+    function gainPoint() {
+        score += 1;
+
+        document.getElementById("score").innerText = `Score: ${score}`;
+    }
+
+    function checkSnakeEating () {
+        const snakeData = snake.getSnake();
+
+        if (snakeData.headPositionX === food.x && snakeData.headPossitionY === food.y) {
+            gainPoint();
+        }
+    }
+
+    function setupSnake () {
+        snake.setMoveDirection("right");
+        
+        setInterval(() => {
+            snake.moveHead();
+            checkSnakeHeadPosition();
+            checkSnakeEating();
+            snake.updateSnakePossition();
+        }, configData.speed);
+
+    }
+
+    function generateFood() {
+        const x = getRandomInt(configData.boardSize);
+        const y = getRandomInt(configData.boardSize);
+        const snakeData = snake.getSnake();
+
+        if(snakeData.body.includes(`${x}${y}`)) {
+            return generateFood();
+        }
+
+        food.x = x;
+        food.y = y;
+
+        document.getElementById(`${x}${y}`).className = "food";
+
+
+    }
+
+    function start() {
+        setupSnake();
+        setupUserInput();
+        generateFood();
     };
 
     return {
-        createGameBoard: createGameBoard
+        createGameBoard: createGameBoard,
+        start: start
     };
 
 })();
