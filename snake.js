@@ -57,6 +57,12 @@ const snake = (function () {
 
     }
 
+    function grow() {
+        
+        snakeData.body.unshift(`${snakeData.headPositionX}${snakeData.headPositionY}`);
+        snakeData.move();
+    }
+
     function getSnake() {
         return snakeData;
     }
@@ -66,7 +72,8 @@ const snake = (function () {
         moveHead: moveHead,
         setMoveDirection: setMoveDirection,
         getSnake: getSnake,
-        updateSnakePossition: updateSnakePossition
+        updateSnakePossition: updateSnakePossition,
+        grow:grow
     };
 
 })();

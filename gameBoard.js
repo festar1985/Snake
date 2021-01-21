@@ -7,6 +7,8 @@ const gameBoard = (function () {
     };
     let score = 0;
 
+    let loop;
+
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
     }
@@ -43,14 +45,14 @@ const gameBoard = (function () {
         const snakeData = snake.getSnake();
 
         if(snakeData.headPositionX < 0 || snakeData.headPositionX >= configData.boardSize) {
-            alert("Game Over");
+            gameOver();
         }
         else if(snakeData.headPositionY < 0 || snakeData.headPositionY >= configData.boardSize) {
-            alert("Game Over");
+            gameOver();
         }
 
         if (snakeData.body.includes(`${snakeData.headPositionX}${snakeData.headPositionY}`)) {
-            alert("Game Over you bite yourself")
+            gameOver();
         }
 
     }
@@ -74,21 +76,23 @@ const gameBoard = (function () {
     function gainPoint() {
         score += 1;
 
-        document.getElementById("score").innerText = `Score: ${score}`;
+        document.getElementById("score").innerText = `SCORE: ${score}`;
     }
 
-    function checkSnakeEating () {
+    function checkSnakeEating() {
         const snakeData = snake.getSnake();
 
-        if (snakeData.headPositionX === food.x && snakeData.headPossitionY === food.y) {
+        if (snakeData.headPositionX === food.x && snakeData.headPositionY === food.y) {
             gainPoint();
-        }
-    }
+            snake.grow();
+            generateFood();
+        };
+    };
 
     function setupSnake () {
         snake.setMoveDirection("right");
         
-        setInterval(() => {
+       loop =  setInterval(() => {
             snake.moveHead();
             checkSnakeHeadPosition();
             checkSnakeEating();
@@ -96,6 +100,11 @@ const gameBoard = (function () {
         }, configData.speed);
 
     }
+
+    function gameOver() {
+        clearInterval(loop);
+        alert("Game Over You loose");
+    };
 
     function generateFood() {
         const x = getRandomInt(configData.boardSize);
